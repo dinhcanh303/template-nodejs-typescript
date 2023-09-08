@@ -4,20 +4,34 @@ import {
   ValidationBuilder as Builder,
   Validator
 } from '@/application/validation';
-import { AuthenticationError } from '@/domain/entities';
-import { FacebookAuthentication } from '@/domain/use-cases';
+import { TranslateService } from '@/domain/use-cases';
 
-type HttpRequest = { token: string };
-type Model = Error | { accessToken: string };
+type HttpRequest = {
+  originalText: string;
+  sources: string;
+  destination: string;
+};
+type Model =
+  | Error
+  | {
+      originalText: string;
+      sources: string;
+      destination: string;
+      resultText: string;
+    };
 
 export class FacebookLoginController extends Controller {
-  constructor(private readonly facebookAuthentication: FacebookAuthentication) {
+  constructor(private readonly service: TranslateService) {
     super();
   }
-  
-  async perform({ token }: HttpRequest): Promise<HttpResponse<Model>> {
+
+  async perform({
+    originalText,
+    sources,
+    destination
+  }: HttpRequest): Promise<HttpResponse<Model>> {
     try {
-      const accessToken = await this.facebookAuthentication({ token });
+      const accessToken = await this.service.translate({ token });
       return ok(accessToken);
     } catch (error) {
       if (error instanceof AuthenticationError) return unauthorized();

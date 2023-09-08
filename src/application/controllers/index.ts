@@ -1,3 +1,3 @@
 export * from './controller';
-export * from './facebook-login';
+export * from './translation.controller';
 export * from './save-picture';
