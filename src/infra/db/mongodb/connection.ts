@@ -1,4 +1,3 @@
-import { IConnectDb } from '../contracts/IConnectDb';
 import { Singleton } from '../database.singleton';
 import mongoose from 'mongoose';
 
