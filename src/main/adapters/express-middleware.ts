@@ -1,17 +1,21 @@
 import { Middleware } from '@/application/middlewares';
 
-import { RequestHandler } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-type Adapter = (middleware: Middleware) => RequestHandler;
-
-export const adaptExpressMiddleware: Adapter =
-  (middleware) => async (req, res, next) => {
-    const { statusCode, data } = await middleware.handle({ ...req.headers });
-    if (statusCode === 200) {
-      const validEntries = Object.entries(data).filter(([, value]) => value);
-      req.locals = { ...req.locals, ...Object.fromEntries(validEntries) };
+export const adaptMiddleware = (middleware: Middleware) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const request = {
+      accessToken: req.headers?.['x-access-token'],
+      ...(req.headers || {})
+    };
+    const httpResponse = await middleware.handle(request);
+    if (httpResponse.statusCode === 200) {
+      Object.assign(req, httpResponse.data);
       next();
     } else {
-      res.status(statusCode).json({ error: data.message });
+      res.status(httpResponse.statusCode).json({
+        error: httpResponse.data.message
+      });
     }
   };
+};

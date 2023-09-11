@@ -9,5 +9,5 @@ export class ApiKey {
   @Column({ default: false })
   status?: boolean;
   @Column({ default: [] })
-  permission!: Array<string>;
+  permissions!: Array<string>;
 }

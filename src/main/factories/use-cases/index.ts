@@ -1,1 +1,1 @@
-export * from './api-key.factory';
+export * from './api-key';

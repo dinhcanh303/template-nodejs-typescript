@@ -1,7 +1,11 @@
-import { adaptExpressRoute as adapt } from '@/main/adapters';
+import { adaptRoute as adapt } from '@/main/adapters';
 import { Router } from 'express';
-import { makeApiKeyController } from '@/main/factories';
+import {
+  makeCreateApiKeyController,
+  makeFindApiKeyController
+} from '@/main/factories';
 
 export default (router: Router): void => {
-  router.get('/createApiKey', adapt(makeApiKeyController()));
+  router.get('/getApiKey', adapt(makeFindApiKeyController()));
+  router.post('/createApiKey', adapt(makeCreateApiKeyController()));
 };

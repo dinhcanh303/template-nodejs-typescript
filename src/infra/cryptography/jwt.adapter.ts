@@ -1,4 +1,4 @@
-import { Encrypt, Decrypt } from '@/domain/contracts';
+import { Encrypt, Decrypt } from '@/domain/use-cases';
 
 import jwt from 'jsonwebtoken';
 

@@ -1,2 +1,2 @@
 export * from './controller';
-export * from './api-key.controller';
+export * from './api-key';

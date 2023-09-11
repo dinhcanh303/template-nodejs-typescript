@@ -1,4 +1,4 @@
-import { Crypto } from '@/domain/contracts';
+import { Crypto } from '@/domain/use-cases';
 import crypto from 'crypto';
 
 export class CryptoAdapter implements Crypto {

@@ -38,38 +38,38 @@ services:
       - "8102:80"
     networks:
       - node-clean
-  redis:
-    image: redis
-    container_name: node-clean-redis
-    restart: unless-stopped
-    environment:
-      - REDIS_PASSWORD=password
-      - REDIS_REPLICATION_mode=master
-    ports:
-      - "6379:6379"
-    networks:
-      - node-clean
-  redisinsight:
-    image: redislabs/redisinsight
-    container_name: node-clean-redisinsight
-    restart: unless-stopped
-    volumes:
-      - ../redis:/var/lib/redis
-    ports:
-      - "8103:8001"
-    networks:
-      - node-clean
-  api:
-    container_name: node-clean-api
-    image: node:19
-    working_dir: /usr/src/node-clean-api
-    restart: always
-    command: bash -c "npm install --only=prod && npm run debug"
-    volumes:
-      - ./dist/:/usr/src/node-clean-api/dist/
-      - ./package.json:/usr/src/node-clean-api/package.json
-    ports:
-      - "8080:8080"
-    links:
-      - redis
-      - mysql
+  # redis:
+  #   image: redis
+  #   container_name: node-clean-redis
+  #   restart: unless-stopped
+  #   environment:
+  #     - REDIS_PASSWORD=password
+  #     - REDIS_REPLICATION_mode=master
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - node-clean
+  # redisinsight:
+  #   image: redislabs/redisinsight
+  #   container_name: node-clean-redisinsight
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ../redis:/var/lib/redis
+  #   ports:
+  #     - "8103:8001"
+  #   networks:
+  #     - node-clean
+  # api:
+  #   container_name: node-clean-api
+  #   image: node:19
+  #   working_dir: /usr/src/node-clean-api
+  #   restart: always
+  #   command: bash -c "npm install --only=prod && npm run debug"
+  #   volumes:
+  #     - ./dist/:/usr/src/node-clean-api/dist/
+  #     - ./package.json:/usr/src/node-clean-api/package.json
+  #   ports:
+  #     - "8080:8080"
+  #   links:
+  #     - redis
+  #     - mysql

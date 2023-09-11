@@ -1,8 +1,8 @@
-export type ApiKeyModel = {
+export type ApiKey = {
   id?: string;
   key: string;
   status?: boolean;
-  permission: Array<string>;
+  permissions: Array<string>;
   createdAt?: Date;
   updatedAt?: Date;
 };
