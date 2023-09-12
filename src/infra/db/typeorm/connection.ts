@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { env } from '@/main/config/env';
 import { Singleton } from '../database.singleton';
+import { ApiKey } from './entities/api-key';
 
 export class TypeormConnection extends Singleton {
   connect() {
@@ -16,9 +17,10 @@ export class TypeormConnection extends Singleton {
       database: db.database,
       synchronize: true,
       logging: true,
-      entities: ['entities/*.ts']
+      // entities: ['entities/*.ts']
+      entities: [ApiKey],
       // subscribers: [],
-      // migrations: []
+      migrations: []
     });
     return dataSource;
   }
