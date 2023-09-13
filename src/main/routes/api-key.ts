@@ -6,6 +6,6 @@ import {
 } from '@/main/factories';
 
 export default (router: Router): void => {
-  router.get('/getApiKey', adapt(makeFindApiKeyController()));
-  router.post('/createApiKey', adapt(makeCreateApiKeyController()));
+  router.get('/api-keys/:key', adapt(makeFindApiKeyController()));
+  router.post('/api-keys', adapt(makeCreateApiKeyController()));
 };

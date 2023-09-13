@@ -1,13 +1,13 @@
 import { Controller } from '@/application/controllers';
 import { HttpResponse, ok } from '@/application/helpers';
 import { ApiKey } from '@/domain/entities';
-import { ApiKeyService } from '@/domain/services';
+import { ApiKeyUseCase } from '@/domain/use-cases';
 export namespace ApiKeyController {
   export type Model = Error | ApiKey;
   export type HttpRequest = { key: string };
 }
 export class FindApiKeyController extends Controller {
-  constructor(private readonly service: ApiKeyService) {
+  constructor(private readonly service: ApiKeyUseCase) {
     super();
   }
   async perform({

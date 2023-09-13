@@ -6,6 +6,7 @@ type Adapter = (controller: Controller) => RequestHandler;
 
 export const adaptRoute: Adapter = (controller) => async (req, res) => {
   const { statusCode, data } = await controller.handle({
+    ...req.params,
     ...req.body,
     ...req.locals
   });

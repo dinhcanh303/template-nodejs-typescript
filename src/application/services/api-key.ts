@@ -1,5 +1,5 @@
-import { Crypto } from '@/domain/use-cases';
-import { ApiKeyRepository, ApiKeyUseCase } from '../use-cases/api-key';
+import { ApiKeyUseCase } from '@/domain/use-cases';
+import { ApiKeyRepository, Crypto } from '@/domain/contracts';
 
 export class ApiKeyService implements ApiKeyUseCase {
   constructor(
@@ -11,6 +11,7 @@ export class ApiKeyService implements ApiKeyUseCase {
   }
   async create(): Promise<ApiKeyRepository.Result> {
     const keyHash = await this.crypto.create();
+    console.log(keyHash);
     return await this.apiKeyRepository.create(keyHash);
   }
 }

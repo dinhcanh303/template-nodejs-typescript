@@ -1,4 +1,4 @@
-import { ApiKeyService } from '@/domain/services';
+import { ApiKeyService } from '@/application/services';
 import { CryptoAdapter } from '@/infra/cryptography/crypto.adapter';
 import { ApiKeyTypeOrmRepository } from '@/infra/db/typeorm/repos/api-key.repository';
 

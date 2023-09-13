@@ -1,10 +1,10 @@
 import { Controller } from '@/application/controllers';
 import { HttpResponse, badRequest, ok } from '@/application/helpers';
-import { ApiKeyService } from '@/domain/services';
 import { ApiKeyController } from './find-api-key.controller';
+import { ApiKeyUseCase } from '@/domain/use-cases';
 
 export class CreateApiKeyController extends Controller {
-  constructor(private readonly service: ApiKeyService) {
+  constructor(private readonly service: ApiKeyUseCase) {
     super();
   }
   async perform(): Promise<HttpResponse<ApiKeyController.Model>> {

@@ -1,4 +1,4 @@
-import { Hash, HashCompare } from '@/domain/use-cases';
+import { Hash, HashCompare } from '@/domain/contracts';
 
 import bcrypt from 'bcrypt';
 
