@@ -1,4 +1,4 @@
-import { ApiKeyRepository } from '@/domain/use-cases';
+import { ApiKeyRepository } from '@/domain/contracts';
 import { TypeormConnection } from '../connection';
 import { DataSource } from 'typeorm';
 import { ApiKey } from '../entities/api-key';
