@@ -10,6 +10,11 @@ export const adaptRoute: Adapter = (controller) => async (req, res) => {
     ...req.body,
     ...req.locals
   });
-  const json = [200, 204].includes(statusCode) ? data : { error: data.message };
+  const json = Array(100)
+    .fill(1)
+    .map((_, index) => index + 200)
+    .includes(statusCode)
+    ? { statusCode, data }
+    : { error: data.message };
   res.status(statusCode).json(json);
 };

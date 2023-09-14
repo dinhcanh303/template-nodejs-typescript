@@ -1,9 +1,10 @@
 import { ApiKeyService } from '@/application/services';
+import { ApiKeyUseCase } from '@/domain/use-cases';
 import { CryptoAdapter } from '@/infra/cryptography/crypto.adapter';
-import { ApiKeyTypeOrmRepository } from '@/infra/db/typeorm/repos/api-key.repository';
+import { ApiKeyMongoDbRepository } from '@/infra/db/mongodb/repos';
 
-export const makeDbCreateApiKey = (): ApiKeyService => {
+export const makeDbCreateApiKey = (): ApiKeyUseCase => {
   const crypto = new CryptoAdapter();
-  const apiKey = new ApiKeyTypeOrmRepository();
+  const apiKey = new ApiKeyMongoDbRepository();
   return new ApiKeyService(crypto, apiKey);
 };

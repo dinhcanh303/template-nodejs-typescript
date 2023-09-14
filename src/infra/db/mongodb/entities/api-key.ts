@@ -1,5 +1,4 @@
-'use strict';
-import { model, Schema } from 'mongoose'; // Erase if already required
+import { model, Schema } from 'mongoose';
 
 const DOCUMENT_NAME = 'ApiKey';
 const COLLECTION_NAME = 'api_keys';

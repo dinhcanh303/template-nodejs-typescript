@@ -4,7 +4,7 @@ import { DatabaseConnection } from '@/infra/db';
 
 import 'reflect-metadata';
 
-DatabaseConnection.connectDatabase('typeorm')
+DatabaseConnection.connectDatabase(env.db.connection)
   .then(async () => {
     const { app } = await import('@/main/config/app');
     app.listen(env.port, () =>

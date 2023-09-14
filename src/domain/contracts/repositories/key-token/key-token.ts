@@ -7,14 +7,14 @@ export interface KeyTokenRepository {
   findByUserId: (
     userId: string
   ) => Promise<KeyTokenRepository.ResultFindByUserId>;
-  removeKeyById: (id?: string) => Promise<boolean>;
+  removeKeyById: (id?: string) => Promise<any>;
   findByRefreshToken: (
     refreshToken: string
   ) => Promise<KeyTokenRepository.ResultFindByRefreshToken>;
   findByRefreshTokenUsed: (
     refreshToken: string
   ) => Promise<KeyTokenRepository.ResultFindByRefreshTokenUsed>;
-  deletedKeyById: (id: string) => Promise<boolean>;
+  deletedKeyById: (id: string) => Promise<any>;
 }
 export namespace KeyTokenRepository {
   export type Params = Pick<

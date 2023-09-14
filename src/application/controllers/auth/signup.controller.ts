@@ -1,21 +1,20 @@
 import { Controller } from '@/application/controllers';
 import { HttpResponse, ok } from '@/application/helpers';
 import { AuthenticationUseCase } from '@/domain/use-cases';
-export namespace LoginController {
+export namespace SignupController {
   export type Model = Error | AuthenticationUseCase.Result;
-  export type HttpRequestLogin = { email: string; password: string };
+  export type HttpRequestSignup = { input: AuthenticationUseCase.Params };
 }
-export class LoginController extends Controller {
+export class SignupController extends Controller {
   constructor(private readonly service: AuthenticationUseCase) {
     super();
   }
   async perform({
-    email,
-    password
-  }: LoginController.HttpRequestLogin): Promise<
-    HttpResponse<LoginController.Model>
+    input
+  }: SignupController.HttpRequestSignup): Promise<
+    HttpResponse<SignupController.Model>
   > {
-    const data = await this.service.login(email, password);
+    const data = await this.service.signup(input);
     return ok(data);
   }
 }

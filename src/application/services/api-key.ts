@@ -11,7 +11,6 @@ export class ApiKeyService implements ApiKeyUseCase {
   }
   async create(): Promise<ApiKeyRepository.Result> {
     const keyHash = await this.crypto.create();
-    console.log(keyHash);
     return await this.apiKeyRepository.create(keyHash);
   }
 }

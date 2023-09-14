@@ -1,3 +1,3 @@
 export interface Decrypt {
-  decrypt: (hypertext: string) => Promise<string>;
+  decrypt: (token: string, secretOrPrivateKey: string) => Promise<any>;
 }

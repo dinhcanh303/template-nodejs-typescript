@@ -10,7 +10,7 @@ import {
   HashCompare,
   KeyTokenRepository,
   ShopRepository,
-  Verify,
+  Decrypt,
   Crypto
 } from '@/domain/contracts';
 import { KeyToken } from '@/domain/entities';
@@ -28,7 +28,7 @@ export class AuthService implements AuthenticationUseCase {
     private readonly crypto: Crypto,
     private readonly keyTokenRepository: KeyTokenRepository,
     private readonly encryptToken: Encrypt,
-    private readonly verifyToken: Verify,
+    private readonly verifyToken: Decrypt,
     private readonly hashComparePassword: HashCompare
   ) {}
 
@@ -137,7 +137,7 @@ export class AuthService implements AuthenticationUseCase {
     try {
       const accessToken = await this.encryptToken.encrypt(payload, publicKey);
       const refreshToken = await this.encryptToken.encrypt(payload, privateKey);
-      this.verifyToken.verify(accessToken, publicKey);
+      this.verifyToken.decrypt(accessToken, publicKey);
       return { accessToken, refreshToken };
     } catch (error) {
       console.log(error);

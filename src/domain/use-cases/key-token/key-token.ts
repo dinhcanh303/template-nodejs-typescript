@@ -5,14 +5,14 @@ export interface KeyTokenUseCase {
     input: KeyTokenUseCase.Params
   ) => Promise<KeyTokenUseCase.Result>;
   findByUserId: (userId: string) => Promise<KeyTokenUseCase.ResultFindByUserId>;
-  removeKeyById: (id: string) => Promise<boolean>;
+  removeKeyById: (id: string) => Promise<any>;
   findByRefreshToken: (
     refreshToken: string
   ) => Promise<KeyTokenUseCase.ResultFindByRefreshToken>;
   findByRefreshTokenUsed: (
     refreshToken: string
   ) => Promise<KeyTokenUseCase.ResultFindByRefreshTokenUsed>;
-  deletedKeyById: (id: string) => Promise<boolean>;
+  deletedKeyById: (id: string) => Promise<any>;
 }
 export namespace KeyTokenUseCase {
   export type Params = Pick<

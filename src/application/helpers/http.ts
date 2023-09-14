@@ -19,14 +19,14 @@ export const badRequest = (error: Error): HttpResponse<Error> => ({
   data: error
 });
 
-export const unauthorized = (): HttpResponse<Error> => ({
+export const unauthorized = (message?: string): HttpResponse<Error> => ({
   statusCode: 401,
-  data: new UnauthorizedError()
+  data: new UnauthorizedError(message)
 });
 
-export const forbidden = (): HttpResponse<Error> => ({
+export const forbidden = (message?: string): HttpResponse<Error> => ({
   statusCode: 403,
-  data: new ForbiddenError()
+  data: new ForbiddenError(message)
 });
 
 export const serverError = (error: unknown): HttpResponse<Error> => ({
