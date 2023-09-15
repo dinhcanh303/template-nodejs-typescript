@@ -15,6 +15,7 @@ export class LogoutController extends Controller {
   }: LogoutController.HttpRequestLogout): Promise<
     HttpResponse<LogoutController.Model>
   > {
+    console.log(keyStore);
     const logout = await this.service.logout(keyStore);
     return ok(logout);
   }

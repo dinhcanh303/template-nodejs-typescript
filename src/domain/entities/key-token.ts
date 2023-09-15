@@ -4,7 +4,7 @@ export type KeyToken = {
   publicKey: string;
   privateKey: string;
   refreshToken?: string;
-  refreshTokenUsed?: string;
+  refreshTokensUsed?: string;
   createAt?: Date;
   updatedAt?: Date;
 };

@@ -1,4 +1,5 @@
-import { ShopRepository, ShopUseCase } from '../use-cases/shop';
+import { ShopRepository } from '@/domain/contracts';
+import { ShopUseCase } from '@/domain/use-cases';
 
 export class ShopService implements ShopUseCase {
   constructor(private readonly shopRepository: ShopRepository) {}

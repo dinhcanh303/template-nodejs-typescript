@@ -11,9 +11,9 @@ export interface KeyTokenRepository {
   findByRefreshToken: (
     refreshToken: string
   ) => Promise<KeyTokenRepository.ResultFindByRefreshToken>;
-  findByRefreshTokenUsed: (
+  findByRefreshTokensUsed: (
     refreshToken: string
-  ) => Promise<KeyTokenRepository.ResultFindByRefreshTokenUsed>;
+  ) => Promise<KeyTokenRepository.ResultFindByRefreshTokensUsed>;
   deletedKeyById: (id: string) => Promise<any>;
 }
 export namespace KeyTokenRepository {
@@ -24,5 +24,5 @@ export namespace KeyTokenRepository {
   export type Result = string | null | Error;
   export type ResultFindByUserId = KeyToken;
   export type ResultFindByRefreshToken = KeyToken;
-  export type ResultFindByRefreshTokenUsed = KeyToken;
+  export type ResultFindByRefreshTokensUsed = KeyToken;
 }
