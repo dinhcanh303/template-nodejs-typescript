@@ -28,23 +28,24 @@ export class AuthService implements AuthenticationUseCase {
     private readonly crypto: Crypto,
     private readonly keyTokenRepository: KeyTokenRepository,
     private readonly encryptToken: Encrypt,
-    private readonly verifyToken: Decrypt,
+    private readonly decryptToken: Decrypt,
     private readonly hashComparePassword: HashCompare
   ) {}
 
   async signup(
     input: AuthenticationUseCase.Params
   ): Promise<AuthenticationUseCase.Result> {
-    const holderShop = await this.shopRepository.findByEmail(input.email);
+    const { name, email, password } = input;
+    const holderShop = await this.shopRepository.findByEmail(email);
     if (holderShop) {
       throw new BadRequestError('Error: Shop already exists');
     }
-    const passwordHash = await this.hashPassword.hash(input.password);
+    const passwordHash = await this.hashPassword.hash(password);
     const newShop = await this.shopRepository.create({
-      name: input.name,
-      email: input.email,
+      name,
+      email,
       password: passwordHash,
-      roles: [RoleShop.ADMIN]
+      roles: [RoleShop.SHOP]
     });
     if (newShop) {
       const publicKey = await this.crypto.create();
@@ -59,7 +60,7 @@ export class AuthService implements AuthenticationUseCase {
       const tokens = await this.createTokenPair(
         {
           userId: newShop.id,
-          email: input.email
+          email
         },
         publicKey,
         privateKey
@@ -106,7 +107,7 @@ export class AuthService implements AuthenticationUseCase {
     input: AuthenticationUseCase.ParamsHandleRT
   ): Promise<AuthenticationUseCase.ResultHandleRT> {
     const { userId, email, keyStore, refreshToken } = input;
-    if (keyStore.refreshTokenUsed?.includes(refreshToken)) {
+    if (keyStore.refreshTokensUsed?.includes(refreshToken)) {
       await this.keyTokenRepository.deletedKeyById(userId);
       throw new ForbiddenError('Something wrong happened! Please login again');
     }
@@ -135,9 +136,17 @@ export class AuthService implements AuthenticationUseCase {
     privateKey: string
   ) {
     try {
-      const accessToken = await this.encryptToken.encrypt(payload, publicKey);
-      const refreshToken = await this.encryptToken.encrypt(payload, privateKey);
-      this.verifyToken.decrypt(accessToken, publicKey);
+      const accessToken = await this.encryptToken.encrypt(payload, publicKey, {
+        expiresIn: '2 days'
+      });
+      const refreshToken = await this.encryptToken.encrypt(
+        payload,
+        privateKey,
+        {
+          expiresIn: '7 days'
+        }
+      );
+      this.decryptToken.decrypt(accessToken, publicKey);
       return { accessToken, refreshToken };
     } catch (error) {
       console.log(error);

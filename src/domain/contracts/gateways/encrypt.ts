@@ -1,6 +1,7 @@
 export interface Encrypt {
   encrypt: (
     payload: string | object,
-    secretOrPrivateKey: string
+    secretOrPrivateKey: any,
+    options?: object
   ) => Promise<string>;
 }

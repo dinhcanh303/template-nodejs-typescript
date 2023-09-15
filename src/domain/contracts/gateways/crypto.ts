@@ -1,3 +1,3 @@
 export interface Crypto {
-  create: () => Promise<string>;
+  create: () => Promise<any>;
 }
