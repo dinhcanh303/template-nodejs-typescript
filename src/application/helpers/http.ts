@@ -1,35 +1,44 @@
 import {
+  BadRequestError,
   ForbiddenError,
   ServerError,
   UnauthorizedError
 } from '@/application/errors';
+import ReasonPhrases from '../errors/reasonPhrases';
+import StatusCodes from '../errors/statusCodes';
 
 export type HttpResponse<T = any> = {
   statusCode: number;
-  data: T;
+  message: string;
+  data?: T;
 };
 
-export const ok = <T = any>(data: T): HttpResponse<T> => ({
-  statusCode: 200,
+export const ok = <T = any>(data: T, message?: string): HttpResponse<T> => ({
+  statusCode: StatusCodes.OK,
+  message: message ?? ReasonPhrases.OK,
+  data
+});
+export const created = <T = any>(
+  data: T,
+  message?: string
+): HttpResponse<T> => ({
+  statusCode: StatusCodes.CREATED,
+  message: message ?? ReasonPhrases.CREATED,
   data
 });
 
-export const badRequest = (error: Error): HttpResponse<Error> => ({
-  statusCode: 400,
-  data: error
+export const badRequest = (message?: string): HttpResponse<Error> => ({
+  ...new BadRequestError(message)
 });
 
 export const unauthorized = (message?: string): HttpResponse<Error> => ({
-  statusCode: 401,
-  data: new UnauthorizedError(message)
+  ...new UnauthorizedError(message)
 });
 
 export const forbidden = (message?: string): HttpResponse<Error> => ({
-  statusCode: 403,
-  data: new ForbiddenError(message)
+  ...new ForbiddenError(message)
 });
 
-export const serverError = (error: unknown): HttpResponse<Error> => ({
-  statusCode: 500,
-  data: new ServerError(error instanceof Error ? error : undefined)
+export const serverError = (message?: string): HttpResponse<Error> => ({
+  ...new ServerError(message)
 });

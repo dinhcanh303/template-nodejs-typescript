@@ -3,6 +3,7 @@ import { Middleware } from '@/application/middlewares';
 import { RequiredString } from '@/application/validation';
 import { ApiKeyRepository } from '@/domain/contracts';
 import { ApiKey } from '@/domain/entities';
+import { ForbiddenError } from '@/application/errors';
 
 export namespace ApiKeyMiddleware {
   export type Request = {
@@ -16,17 +17,13 @@ export class ApiKeyMiddleware implements Middleware {
   async handle({
     apiKey
   }: ApiKeyMiddleware.Request): Promise<HttpResponse<ApiKeyMiddleware.Model>> {
-    if (!this.validate({ apiKey })) return forbidden();
-    try {
-      if (!apiKey) return forbidden();
-      const objKey = await this.apiKeyRepository.findById(apiKey);
-      if (!objKey) return forbidden();
-      return ok({
-        objKey
-      });
-    } catch {
-      return forbidden();
-    }
+    if (!this.validate({ apiKey })) throw new ForbiddenError();
+    if (!apiKey) throw new ForbiddenError();
+    const objKey = await this.apiKeyRepository.findById(apiKey);
+    if (!objKey) throw new ForbiddenError();
+    return ok({
+      objKey
+    });
   }
   private validate({ apiKey }: ApiKeyMiddleware.Request): boolean {
     const error = new RequiredString(apiKey, 'x-api-key').validate();

@@ -1,20 +1,27 @@
 import { Controller } from '@/application/controllers';
 
-import { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-type Adapter = (controller: Controller) => RequestHandler;
-
-export const adaptRoute: Adapter = (controller) => async (req, res) => {
-  const { statusCode, data } = await controller.handle({
-    ...req.params,
-    ...req.body,
-    ...req.locals
-  });
-  const json = Array(100)
-    .fill(1)
-    .map((_, index) => index + 200)
-    .includes(statusCode)
-    ? { statusCode, data }
-    : { error: data.message };
-  res.status(statusCode).json(json);
+export const adaptRoute = (controller: Controller) => {
+  return async (req: Request | any, res: Response, next: NextFunction) => {
+    const request = {
+      ...(req.headers || {}),
+      ...(req.body || {}),
+      ...(req.params || {}),
+      ...(req.locals || {}),
+      keyStore: req?.keyStore,
+      user: req?.user,
+      refreshToken: req?.refreshToken
+    };
+    try {
+      const httpResponse = await controller.handle(request);
+      if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299) {
+        res.status(httpResponse.statusCode).json(httpResponse);
+      } else {
+        res.status(httpResponse.statusCode).json(httpResponse);
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
 };

@@ -1,6 +1,7 @@
-import { forbidden, HttpResponse, ok } from '@/application/helpers';
+import { HttpResponse, ok } from '@/application/helpers';
 import { Middleware } from '@/application/middlewares';
 import { ApiKey } from '@/domain/entities';
+import { ForbiddenError } from '@/application/errors';
 
 export namespace PermissionMiddleware {
   export type Request = {
@@ -16,19 +17,15 @@ export class PermissionMiddleware implements Middleware {
   }: PermissionMiddleware.Request): Promise<
     HttpResponse<PermissionMiddleware.Model>
   > {
-    if (!this.validate({ objKey })) return forbidden();
-    try {
-      if (!objKey.permissions) return forbidden('Permissions denied');
-      const validPermission = objKey.permissions.includes(
-        this.permission ?? ''
-      );
-      if (!validPermission) return forbidden('Permission denied');
-      return ok(true);
-    } catch {
-      return forbidden();
-    }
+    if (this.validate(objKey)) throw new ForbiddenError();
+    if (!objKey.permissions) throw new ForbiddenError('Permissions denied');
+    const validPermission = objKey.permissions.includes(
+      this.permission ?? '0000'
+    );
+    if (!validPermission) throw new ForbiddenError('Permissions denied');
+    return ok(true);
   }
-  private validate({ objKey }: PermissionMiddleware.Request): boolean {
+  private validate(objKey: ApiKey): boolean {
     return objKey === undefined;
   }
 }

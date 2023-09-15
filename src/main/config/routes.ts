@@ -1,7 +1,7 @@
 import { Router, Express } from 'express';
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import { apiKey } from '@/main/middlewares';
+import { apiKey, permission } from '@/main/middlewares';
 
 export const setupRoutes = (app: Express): void => {
   const router = Router();
@@ -11,5 +11,6 @@ export const setupRoutes = (app: Express): void => {
       (await import(`../routes/${file}`)).default(router);
     });
   app.use(apiKey);
+  app.use(permission);
   app.use('/api', router);
 };

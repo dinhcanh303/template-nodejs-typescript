@@ -1,7 +1,7 @@
-import { forbidden, HttpResponse, ok } from '@/application/helpers';
+import { HttpResponse, ok } from '@/application/helpers';
 import { Middleware } from '@/application/middlewares';
 import { RequiredString } from '@/application/validation';
-import { NotFoundError, UnauthorizedError } from '../errors';
+import { ForbiddenError, NotFoundError, UnauthorizedError } from '../errors';
 import { Decrypt, KeyTokenRepository } from '@/domain/contracts';
 import { KeyToken } from '@/domain/entities';
 
@@ -29,38 +29,34 @@ export class AuthenticationMiddleware implements Middleware {
     HttpResponse<AuthenticationMiddleware.Model>
   > {
     if (!this.validate({ authorization, clientId, refreshToken }))
-      return forbidden();
-    try {
-      if (!clientId) throw new UnauthorizedError('Invalid Request');
-      const keyStore = await this.keyTokenRepository.findByUserId(clientId);
-      if (!keyStore) throw new NotFoundError('Not Found Key Store');
-      if (refreshToken) {
-        const decodeUser = await this.verifyToken.decrypt(
-          refreshToken,
-          keyStore.privateKey
-        );
-        if (clientId !== decodeUser.userId)
-          throw new UnauthorizedError('Invalid User');
-        return ok({
-          keyStore,
-          user: decodeUser,
-          refreshToken
-        });
-      }
-      const accessToken = authorization;
+      throw new ForbiddenError();
+    if (!clientId) throw new UnauthorizedError('Invalid Request');
+    const keyStore = await this.keyTokenRepository.findByUserId(clientId);
+    if (!keyStore) throw new NotFoundError('Not Found Key Store');
+    if (refreshToken) {
       const decodeUser = await this.verifyToken.decrypt(
-        accessToken,
-        keyStore.publicKey
+        refreshToken,
+        keyStore.privateKey
       );
       if (clientId !== decodeUser.userId)
         throw new UnauthorizedError('Invalid User');
       return ok({
         keyStore,
-        user: decodeUser
+        user: decodeUser,
+        refreshToken
       });
-    } catch {
-      return forbidden();
     }
+    const accessToken = authorization;
+    const decodeUser = await this.verifyToken.decrypt(
+      accessToken,
+      keyStore.publicKey
+    );
+    if (clientId !== decodeUser.userId)
+      throw new UnauthorizedError('Invalid User');
+    return ok({
+      keyStore,
+      user: decodeUser
+    });
   }
   private validate({
     authorization,
