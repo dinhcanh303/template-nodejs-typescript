@@ -7,10 +7,10 @@ export class ProductService implements ProductUseCase {
   async create(input: ProductUseCase.Params): Promise<ProductUseCase.Result> {
     return this.productRepository.create(input);
   }
-  async update(input: ProductUseCase.Params): Promise<ProductUseCase.Params> {
-    return this.productRepository.update(input);
-  }
-  async findById(id: string): Promise<ProductUseCase.Result> {
-    return this.productRepository.findById(id);
-  }
+  // async update(input: ProductUseCase.Params): Promise<ProductUseCase.Params> {
+  //   return this.productRepository.update(input);
+  // }
+  // async findById(id: string): Promise<ProductUseCase.Result> {
+  //   return this.productRepository.findById(id);
+  // }
 }
