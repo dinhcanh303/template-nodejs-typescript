@@ -1,5 +1,3 @@
-import { String40 } from 'aws-sdk/clients/sagemaker';
-
 export type Product = {
   id?: string;
   productName: string;
@@ -7,7 +5,7 @@ export type Product = {
   productDescription?: string;
   productPrice: string;
   productQuantity: string;
-  productType?: string;
+  productType: string;
   productShop: number;
   productAttributes: Clothing | Electronic | Furniture;
   productRatingAverage?: number;

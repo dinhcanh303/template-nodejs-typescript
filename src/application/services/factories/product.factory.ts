@@ -21,11 +21,11 @@ export class ProductFactory {
   static registerProductType(type: string, classRef: any) {
     ProductFactory.productRegistry[type] = classRef;
   }
-  static async createProduct(type: string, payload: any) {
+  static async createProduct(type: string, payload: any, dependencies: any) {
     const productClass = ProductFactory.productRegistry[type];
     if (!productClass)
       throw new BadRequestError(`Invalid Product type ${type}`);
-    return new productClass(payload).createProduct();
+    return new productClass(payload, ...dependencies).createProduct();
   }
 }
 
@@ -35,7 +35,7 @@ export class Product {
   productDescription?: string;
   productPrice: string;
   productQuantity: string;
-  productType?: string;
+  productType: string;
   productShop: number;
   productAttributes: ClothingEntity | ElectronicEntity | FurnitureEntity;
   constructor(
